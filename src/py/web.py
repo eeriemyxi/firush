@@ -1,9 +1,9 @@
 import os
 import random
 
-from firush import api, base
+from nicegui import app, html, run, ui
 
-from nicegui import ui, app, html, run
+from firush import api, base
 
 GRUVBOX_COLORS = {
     "primary": "#427b58",

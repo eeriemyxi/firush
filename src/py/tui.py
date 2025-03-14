@@ -1,6 +1,7 @@
-from firush import api, base
 import random
 import webbrowser
+
+from firush import api, base
 
 
 def perform_query(query: str | None = None):
