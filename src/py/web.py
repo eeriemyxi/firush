@@ -81,10 +81,10 @@ def index():
         ).style("margin-top: 40px; padding: 15px")
 
 
-def main():
+def main(host: str, port: int):
     print("[INFO] Starting the web client...")
 
-    ui.run(reload=False, show=False, storage_secret=STORAGE_SECRET)
+    ui.run(host=host, port=port, reload=False, show=False, storage_secret=STORAGE_SECRET)
 
 
 if __name__ in ("__main__", "__mp_main__"):
