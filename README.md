@@ -45,6 +45,12 @@ That will build the shared library `build/lib/libfirush.so` (or `.dll` on Window
 You should be able to make a wrapper for this library in any programming language that supports the C ABI for FFI.
 
 Windows support currently is not available because the library depends on the POSIX `regex.h` header. Support is planned by making `pcre2`'s POSIX translation layer a requirement for the Windows build.
+
+### API
+The Python wrapper for the API is available as a submodule `firush.api` of `firush` package (that you can install with instruction in the first header).
+
+See `src/firush.c` and `include/firush.h` for the C implementation.
+
 ## Contributing
 The Python wrapper is tested with `pytest`. Install the development packages via `pip install .[dev]` then run `pytest` in the source tree's root.
 
