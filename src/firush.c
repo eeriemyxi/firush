@@ -69,10 +69,7 @@ short fir_fetch_html_for(char* url, struct ResponseStruct* response) {
 short fir_scrape_page_id(char* html, int** ids) {
   regex_t     regex;
   regmatch_t  pmatch[2];
-  regoff_t    off, len;
-  int eflags = 0;
-  
-  eflags |= REG_NOTBOL;
+  regoff_t    len;
 
   if (regcomp(&regex, SCRAPE_ID_RE, REG_EXTENDED)) {
     return 1;
@@ -82,18 +79,17 @@ short fir_scrape_page_id(char* html, int** ids) {
   char* res = malloc(sizeof(char*) * (6 + 1));
   
   for (unsigned int i = 0; ; i++) {
-    if (regexec(&regex, s, ARRAY_SIZE(pmatch), pmatch, eflags)) {
+    if (regexec(&regex, s, ARRAY_SIZE(pmatch), pmatch, REG_NOTBOL)) {
       break;
     }
     
-    off = pmatch[1].rm_so + (s - html);
     len = pmatch[1].rm_eo - pmatch[1].rm_so;
 
     if (res == NULL) {
       return 2;
     }
 
-    memcpy(res, s + pmatch[1].rm_so, sizeof(res));
+    memcpy(res, s + pmatch[1].rm_so, len);
     res[len] = '\0';
     
     arrput(*ids, strtol(res, NULL, 10));
@@ -109,10 +105,7 @@ short fir_scrape_page_id(char* html, int** ids) {
 short fir_scrape_total_pages(char* html, int* total_pages) {
   regex_t     regex;
   regmatch_t  pmatch[2];
-  regoff_t    off, len;
-  int eflags = 0;
-  
-  eflags |= REG_NOTBOL;
+  regoff_t    len;
 
   if (regcomp(&regex, SCRAPE_TOTAL_PAGE_RE, REG_EXTENDED)) {
     return 1;
@@ -120,11 +113,10 @@ short fir_scrape_total_pages(char* html, int* total_pages) {
 
   const char *s = html;
   
-  if (regexec(&regex, s, ARRAY_SIZE(pmatch), pmatch, eflags)) {
+  if (regexec(&regex, s, ARRAY_SIZE(pmatch), pmatch, REG_NOTBOL)) {
     return 0;
   }
   
-  off = pmatch[1].rm_so + (s - html);
   len = pmatch[1].rm_eo - pmatch[1].rm_so;
 
   char* res = malloc(sizeof(char*) * len + 1);
@@ -133,8 +125,8 @@ short fir_scrape_total_pages(char* html, int* total_pages) {
     free(res);
     return 2;
   }
-
-  memcpy(res, s + pmatch[1].rm_so, sizeof(res));
+  
+  memcpy(res, s + pmatch[1].rm_so, len);
   res[len] = '\0';
   
   *total_pages = strtol(res, NULL, 10);
