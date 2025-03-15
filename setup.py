@@ -17,4 +17,5 @@ setup(
     url="https://github.com/eeriemyxi/firush/",
     long_description=open("README.md").read(),
     ext_modules=[firush_api],
+    extras_require = {"dev": ["pytest"]}
 )
