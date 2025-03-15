@@ -7,7 +7,7 @@ The idea is to,
 - Pick a random number between 1 and _k_
 - Scrape and return a random entry from that page.
 
-Firush can be installed via Pypi:
+Firush can be installed via (requires installation of Git):
 ```
 pip install git+https://github.com/eeriemyxi/firush
 ```
