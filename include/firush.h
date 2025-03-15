@@ -6,8 +6,6 @@ struct ResponseStruct {
   int size;
 };
 
-size_t http_write_callback(void *ptr, size_t size, size_t nmemb, struct ResponseStruct *response);
-
 short fir_fetch_html_for(char* url, struct ResponseStruct* response) ;
 
 short fir_scrape_page_id(char* html, int** ids);

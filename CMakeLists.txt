@@ -18,7 +18,8 @@ endif()
 add_library(libfirush SHARED src/firush.c)
 set_target_properties(libfirush PROPERTIES OUTPUT_NAME "firush")
 
-add_executable(firush src/firush.c src/main.c)
+# Runtime is incomplete, so it is disabled
+# add_executable(firush src/firush.c src/main.c)
+# target_link_libraries(firush PRIVATE CURL::libcurl)
 
-target_link_libraries(firush PRIVATE CURL::libcurl)
 target_link_libraries(libfirush PRIVATE CURL::libcurl)
