@@ -20,28 +20,38 @@ GRUVBOX_COLORS = {
 STORAGE_SECRET = os.environ.get("STORAGE_SECRET", "NOSECRET")
 
 
-def ts_notify(label, *args):
+def ts_notify(label, *args, **kwargs):
     with label:
-        ui.notify(*args)
+        ui.notify(*args, **kwargs)
 
 
 def find_manga(query: str, label):
-    ts_notify(label, f'Finding a manga for query="{query}"')
+    ts_notify(label, f'Finding a manga for query="{query}"', type="info", timeout=2)
 
-    ts_notify(label, "Preparing to scrape total pages...")
+    with label:
+        n = ui.notification(timeout=None, type="ongoing")
+
+    n.message = "Preparing to scrape total pages..."
     html = api.fetch_html_for(base.get_query_url(query, 1))
     total_pages = api.scrape_total_pages(html)
 
     page_number = random.randint(1, total_pages)
-
-    ts_notify(label, "Preparing to scrape manga ids...")
+    
+    n.message = "Preparing to scrape manga ids..."
     html = api.fetch_html_for(base.get_query_url(query, page_number))
     ids = api.scrape_page_id(html)
-
+    
+    if not ids:
+        n.message = "Couldn't scrape URLs. Please retry."
+        n.type = "negative"
+        n.timeout = 5
+        return
+    
     url = f"https://nhentai.net/g/{random.choice(ids)}/"
-    ts_notify(
-        label, f"Found {url} at page {page_number} from pool of 1-{total_pages} pages."
-    )
+
+    n.type = "positive"
+    n.message = f"Found {url} at page {page_number} from pool of 1-{total_pages} pages."
+    n.timeout = 3
 
     with label:
         ui.navigate.to(url, new_tab=True)
