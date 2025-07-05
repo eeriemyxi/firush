@@ -60,7 +60,7 @@ def find_manga(query: str, label):
 async def on_submit(query_inp, useless_label):
     query = query_inp.value
 
-    if app.storage.user["query"] != query:
+    if app.storage.user.get("query") != query:
         app.storage.user["query"] = query
         ui.notify("Successfully saved the state of the query input.")
 
